@@ -13,7 +13,7 @@ export class AuthService {
     return;
   }
 
-  async signin(user: any) {
+  async signin() {
     return 'something';
   }
 }

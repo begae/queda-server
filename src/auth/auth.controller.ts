@@ -1,19 +1,25 @@
-import { Controller, Post, Request } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { SigninReqDto, SignupReqDto } from './dto/req.dto';
+import { SigninResDto, SignupResDto } from './dto/res.dto';
+import { ApiPostResponse } from 'src/common/decorator/swagger.decorator';
 
 @ApiTags('Auth')
+@ApiExtraModels(SignupResDto, SigninResDto)
 @Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiPostResponse(SignupResDto)
   @Post('signup')
-  async signup() {
+  async signup(@Body() signupReqDto: SignupReqDto) {
     return this.authService.signup('email', 'password');
   }
 
+  @ApiPostResponse(SigninResDto)
   @Post('signin')
-  async signin(@Request() req) {
-    return this.authService.signin(req.user);
+  async signin(@Body() signinReqDto: SigninReqDto) {
+    return this.authService.signin();
   }
 }
