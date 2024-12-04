@@ -4,16 +4,10 @@ import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 
-const UserMockService = {
-  findAll: () => {
-    return 'find mock users';
-  },
-};
-
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [{ provide: UserService, useValue: UserMockService }],
+  providers: [UserService],
   exports: [UserService],
 })
 export class UserModule {}

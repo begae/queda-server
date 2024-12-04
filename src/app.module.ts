@@ -3,23 +3,41 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { AnalyticsModule } from './analytics/analytics.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import postgresConfig from './config/postgres.config';
+import jwtConfig from './config/jwt.config';
 
 config();
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      autoLoadEntities: true,
-      synchronize: true,
-      logging: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [postgresConfig, jwtConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        let obj: TypeOrmModuleOptions = {
+          type: 'postgres',
+          host: configService.get('postgres.host'),
+          port: configService.get('postgres.port'),
+          database: configService.get('postgres.database'),
+          username: configService.get('postgres.username'),
+          password: configService.get('postgres.password'),
+          autoLoadEntities: true,
+        };
+        if (configService.get('STAGE') === 'local') {
+          console.info('Sync postgres');
+          obj = Object.assign(obj, {
+            synchronize: true,
+            logging: true,
+          });
+        }
+        return obj;
+      },
     }),
     AuthModule,
     UserModule,

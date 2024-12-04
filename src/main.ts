@@ -27,5 +27,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   await app.listen(parseInt(process.env.PORT));
+  console.info(`STAGE=${process.env.STAGE}`);
+  console.info(`Listening on port ${process.env.PORT}`);
 }
 bootstrap();
