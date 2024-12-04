@@ -1,9 +1,11 @@
+import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
 import { Video } from 'src/video/entity/video.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,4 +29,7 @@ export class User {
 
   @OneToMany(() => Video, (video) => video.user)
   videos: Video[];
+
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshToken: RefreshToken;
 }
