@@ -18,10 +18,6 @@ export class AuthService {
     private refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
-    return null;
-  }
-
   async signup(email: string, password: string) {
     const user = await this.userService.findOneByEmail(email);
     if (user) throw new BadRequestException('email already registered');

@@ -15,6 +15,7 @@ import { RefreshToken } from './entity/refresh-token.entity';
   imports: [
     UserModule,
     PassportModule,
+    // dynamic module configuring registered 'jwt' config
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -31,6 +32,7 @@ import { RefreshToken } from './entity/refresh-token.entity';
   providers: [
     AuthService,
     JwtStrategy,
+    // custom provider for applying global(app level) auth guard
     { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
   exports: [AuthService],

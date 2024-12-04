@@ -42,6 +42,7 @@ export class AuthController {
     @Headers('authorization') authorization,
     @User() user: UserAfterAuth,
   ) {
+    // parse token from header by removing prefix 'Bearer '
     const token = /Bearer\s(.+)/.exec(authorization)[1];
     const { accessToken, refreshToken } = await this.authService.refresh(
       token,

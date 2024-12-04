@@ -17,6 +17,7 @@ config();
       isGlobal: true,
       load: [postgresConfig, jwtConfig],
     }),
+    // dynamic module configuring registered 'postgres' config
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {

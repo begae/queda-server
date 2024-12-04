@@ -26,6 +26,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, swaggerDocument, swaggerCustomization);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   await app.listen(parseInt(process.env.PORT));
   console.info(`STAGE=${process.env.STAGE}`);
   console.info(`Listening on port ${process.env.PORT}`);

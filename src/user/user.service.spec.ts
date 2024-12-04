@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { TestingModule, Test } from '@nestjs/testing';
 import { User } from './entity/user.entity';
 
+// fake database that returns a user with the same email as query email
 class MockRepository {
   async findOneBy(query) {
     const user: User = new User();
@@ -18,6 +19,7 @@ describe('User', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        // custom provider that looks like UserRepository but actually is MockRepository
         { provide: getRepositoryToken(User), useClass: MockRepository },
       ],
     }).compile();

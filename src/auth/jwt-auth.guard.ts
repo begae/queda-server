@@ -22,9 +22,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
+  // activate guard when returned false
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    // check if the destination has a value 'true' for key 'is_public'
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -36,9 +38,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const token = /Bearer\s(.+)/.exec(headers['authorization'])[1];
     const decoded = this.jwtService.decode(token);
 
+    // if refresh token is not used correctly throw exception
     if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh')
       throw new UnauthorizedException('access token is required');
 
+    // check if the destination has a value for key 'roles_key'
     const requireRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
