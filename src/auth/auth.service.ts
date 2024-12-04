@@ -34,8 +34,8 @@ export class AuthService {
     if (!user) throw new UnauthorizedException();
     const match = password == user.password;
     if (!match) throw new UnauthorizedException();
-    const refreshToken = await this.generateRefreshToken(user.id);
-    await this.updateRefreshTokenOfUser(user.id, refreshToken);
+    const refreshToken = this.generateRefreshToken(user.id);
+    await this.updateRefreshToken(user.id, refreshToken);
     return {
       accessToken: this.generateAccessToken(user.id),
       refreshToken,
@@ -62,7 +62,7 @@ export class AuthService {
     return this.jwtService.sign(payload, { expiresIn: '30d' });
   }
 
-  private async updateRefreshTokenOfUser(userId: string, refreshToken: string) {
+  private async updateRefreshToken(userId: string, refreshToken: string) {
     let entity = await this.refreshTokenRepository.findOneBy({
       user: { id: userId },
     });

@@ -10,6 +10,8 @@ import {
 import { FindUserResDto } from './dto/res.dto';
 import { PagingResDto } from 'src/common/dto/res.dto';
 import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
+import { Role } from './enum/user.enum';
+import { Roles } from 'src/common/decorator/role.decorator';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto, FindUserResDto, PagingReqDto, PagingResDto)
@@ -19,6 +21,7 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindUserResDto)
+  @Roles(Role.Admin)
   @Get()
   findAll(@Query() { page, size }: PagingReqDto, @User() user: UserAfterAuth) {
     console.log(user);
