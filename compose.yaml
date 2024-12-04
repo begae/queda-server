@@ -1,0 +1,16 @@
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - '${DB_PORT}:5432'
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
