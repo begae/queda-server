@@ -8,5 +8,5 @@ export class FindUserResDto {
   email: string;
 
   @ApiProperty({ required: true })
-  createAt: string;
+  createdAt: string;
 }

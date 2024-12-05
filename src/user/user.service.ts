@@ -10,8 +10,8 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll() {
-    return 'find users';
+  async findAll(page: number, size: number) {
+    return this.userRepository.find({ skip: (page - 1) * size, take: size });
   }
 
   async findOne(id: string) {

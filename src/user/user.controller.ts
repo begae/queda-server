@@ -9,7 +9,6 @@ import {
 } from 'src/common/decorator/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { PagingResDto } from 'src/common/dto/res.dto';
-import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
 import { Role } from './enum/user.enum';
 import { Roles } from 'src/common/decorator/role.decorator';
 
@@ -23,9 +22,13 @@ export class UserController {
   @ApiGetItemsResponse(FindUserResDto)
   @Roles(Role.Admin)
   @Get('all')
-  findAll(@Query() { page, size }: PagingReqDto, @User() user: UserAfterAuth) {
-    console.log(user);
-    return this.userService.findAll();
+  async findAll(
+    @Query() { page, size }: PagingReqDto,
+  ): Promise<FindUserResDto[]> {
+    const users = await this.userService.findAll(page, size);
+    return users.map(({ id, email, createdAt }) => {
+      return { id, email, createdAt: createdAt.toISOString() };
+    });
   }
 
   @ApiBearerAuth()
