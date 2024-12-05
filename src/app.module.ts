@@ -4,13 +4,10 @@ import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { config } from 'dotenv';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-
-config();
 
 @Module({
   imports: [
@@ -30,10 +27,10 @@ config();
           username: configService.get('postgres.username'),
           password: configService.get('postgres.password'),
           autoLoadEntities: true,
+          synchronize: false,
         };
         if (configService.get('STAGE') === 'local') {
           obj = Object.assign(obj, {
-            synchronize: true,
             logging: true,
           });
         }

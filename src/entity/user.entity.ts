@@ -1,5 +1,3 @@
-import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
-import { Video } from 'src/video/entity/video.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,13 +7,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from '../enum/user.enum';
+import { Video } from './video.entity';
+import { RefreshToken } from './refresh-token.entity';
+import { Role } from './user.enum';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // unique columns are also indexes just as pk
+  // test performance with: explain analyze <query>
   @Column({ unique: true })
   email: string;
 

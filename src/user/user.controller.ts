@@ -9,7 +9,7 @@ import {
 } from 'src/common/decorator/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { PagingResDto } from 'src/common/dto/res.dto';
-import { Role } from './enum/user.enum';
+import { Role } from '../entity/user.enum';
 import { Roles } from 'src/common/decorator/role.decorator';
 
 @ApiTags('User')
@@ -37,4 +37,10 @@ export class UserController {
   findOne(@Param() { id }: FindUserReqDto) {
     return this.userService.findOne(id);
   }
+
+  // @Public()
+  // @Post('bulk')
+  // createBulk() {
+  //   return this.userService.createBulk();
+  // }
 }

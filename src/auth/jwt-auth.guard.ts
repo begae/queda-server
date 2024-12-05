@@ -12,7 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from 'src/common/decorator/public.decorator';
 import { ROLES_KEY } from 'src/common/decorator/role.decorator';
-import { Role } from 'src/user/enum/user.enum';
+import { Role } from 'src/entity/user.enum';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()

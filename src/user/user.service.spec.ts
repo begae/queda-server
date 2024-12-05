@@ -1,7 +1,7 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 import { TestingModule, Test } from '@nestjs/testing';
-import { User } from './entity/user.entity';
+import { User } from 'src/entity/user.entity';
 
 // fake database that returns a user with the same email as query email
 class MockRepository {

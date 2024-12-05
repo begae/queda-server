@@ -9,7 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshToken } from './entity/refresh-token.entity';
+import { RefreshToken } from '../entity/refresh-token.entity';
 
 @Module({
   imports: [

@@ -6,9 +6,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
-import { RefreshToken } from './entity/refresh-token.entity';
+import { RefreshToken } from '../entity/refresh-token.entity';
 import { DataSource, Repository } from 'typeorm';
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class AuthService {

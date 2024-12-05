@@ -1,27 +1,21 @@
-import { User } from 'src/user/entity/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
-export class Video {
+export class RefreshToken {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  title: string;
-
-  @Column()
-  mimetype: string;
-
-  @Column({ name: 'download_cnt', default: 0 })
-  downloadCnt: number;
+  token: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -29,7 +23,7 @@ export class Video {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.videos)
+  @OneToOne(() => User, (user) => user.refreshToken)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
