@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
@@ -8,6 +8,7 @@ import { config } from 'dotenv';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 config();
 
@@ -31,7 +32,6 @@ config();
           autoLoadEntities: true,
         };
         if (configService.get('STAGE') === 'local') {
-          console.info('Sync postgres');
           obj = Object.assign(obj, {
             synchronize: true,
             logging: true,
@@ -45,5 +45,10 @@ config();
     VideoModule,
     AnalyticsModule,
   ],
+  providers: [Logger],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

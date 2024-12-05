@@ -25,14 +25,14 @@ export class VideoController {
 
   @ApiBearerAuth()
   @ApiPostResponse(CreateVideoResDto)
-  @Post()
+  @Post('upload')
   upload(@Body() createVideoReqDto: CreateVideoReqDto) {
     return this.videoService.create();
   }
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindVideoResDto)
-  @Get()
+  @Get('all')
   findAll(@Query() { page, size }: PagingReqDto) {
     return this.videoService.findAll();
   }

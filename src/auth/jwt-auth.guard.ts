@@ -1,6 +1,9 @@
 import {
   ExecutionContext,
+  Inject,
   Injectable,
+  Logger,
+  LoggerService,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -18,6 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     private reflector: Reflector,
     private jwtService: JwtService,
     private userService: UserService,
+    @Inject(Logger) private logger: LoggerService,
   ) {
     super();
   }
@@ -39,8 +43,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const decoded = this.jwtService.decode(token);
 
     // if refresh token is not used correctly throw exception
-    if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh')
-      throw new UnauthorizedException('access token is required');
+    if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh') {
+      const error = new UnauthorizedException('access token is required');
+      this.logger.error(error.message, error.stack);
+      throw error;
+    }
 
     // check if the destination has a value for key 'roles_key'
     const requireRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [

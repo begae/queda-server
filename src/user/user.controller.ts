@@ -22,7 +22,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindUserResDto)
   @Roles(Role.Admin)
-  @Get()
+  @Get('all')
   findAll(@Query() { page, size }: PagingReqDto, @User() user: UserAfterAuth) {
     console.log(user);
     return this.userService.findAll();
