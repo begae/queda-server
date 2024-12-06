@@ -9,6 +9,8 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { ConfigService } from '@nestjs/config';
+import * as basicAuth from 'express-basic-auth';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -30,23 +32,40 @@ async function bootstrap() {
     }),
   });
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Better Board')
-    .setDescription('NestJS project API documentation')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const swaggerCustomization: SwaggerCustomOptions = {
-    swaggerOptions: { persistAuthorization: true },
-  };
-  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, swaggerDocument, swaggerCustomization);
+  const configService = app.get(ConfigService);
+  const stage = configService.get('STAGE');
+  const port = parseInt(configService.get('PORT'));
+
+  const SWAGGER_ENVS = ['local', 'dev'];
+  if (SWAGGER_ENVS.includes(stage)) {
+    app.use(
+      ['/docs', 'docs-json'],
+      basicAuth({
+        challenge: true,
+        users: {
+          [configService.get('swagger.user')]:
+            configService.get('swagger.password'),
+        },
+      }),
+    );
+    const config = new DocumentBuilder()
+      .setTitle('Better Board')
+      .setDescription('NestJS project API documentation')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const custom: SwaggerCustomOptions = {
+      swaggerOptions: { persistAuthorization: true },
+    };
+    const swaggerDocument = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, swaggerDocument, custom);
+  }
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
 
-  await app.listen(parseInt(process.env.PORT));
-  Logger.log(`STAGE=${process.env.STAGE}`);
-  Logger.log(`Listening on port ${process.env.PORT}`);
+  await app.listen(port);
+  Logger.log(`STAGE=${stage}`);
+  Logger.log(`Listening on port ${port}`);
 }
 bootstrap();
