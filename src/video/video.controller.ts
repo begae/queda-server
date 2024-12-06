@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { VideoService } from './video.service';
 import { CreateVideoReqDto, FindVideoReqDto } from './dto/req.dto';
@@ -10,6 +18,8 @@ import {
 } from 'src/common/decorator/swagger.decorator';
 import { CreateVideoResDto, FindVideoResDto } from './dto/res.dto';
 import { PagingResDto } from 'src/common/dto/res.dto';
+import { ThrottlerProxyGuard } from 'src/common/guard/throttler-proxy.guard';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Video')
 @ApiExtraModels(
@@ -19,6 +29,7 @@ import { PagingResDto } from 'src/common/dto/res.dto';
   PagingReqDto,
   PagingResDto,
 )
+@UseGuards(ThrottlerProxyGuard)
 @Controller('api/videos')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
@@ -32,6 +43,7 @@ export class VideoController {
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindVideoResDto)
+  @SkipThrottle()
   @Get('all')
   findAll(@Query() { page, size }: PagingReqDto) {
     return this.videoService.findAll();
@@ -45,6 +57,7 @@ export class VideoController {
   }
 
   @ApiBearerAuth()
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Get(':id/download')
   async download(@Param() { id }: FindVideoReqDto) {
     return this.videoService.download(id);
