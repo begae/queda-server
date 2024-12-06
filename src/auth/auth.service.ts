@@ -9,6 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { RefreshToken } from '../entity/refresh-token.entity';
 import { DataSource, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -29,8 +30,16 @@ export class AuthService {
     try {
       const user = await this.userService.findOneByEmail(email);
       if (user) throw new BadRequestException('email already registered');
-      const userEntity = queryRunner.manager.create(User, { email, password });
+
+      const saltRounds = 10;
+      const hash = await bcrypt.hash(password, saltRounds);
+
+      const userEntity = queryRunner.manager.create(User, {
+        email,
+        password: hash,
+      });
       await queryRunner.manager.save(userEntity);
+
       const accessToken = this.generateAccessToken(userEntity.id);
       const refreshToken = this.generateRefreshToken(userEntity.id);
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
@@ -38,6 +47,7 @@ export class AuthService {
         token: refreshToken,
       });
       await queryRunner.manager.save(refreshTokenEntity);
+
       await queryRunner.commitTransaction();
       return { id: userEntity.id, accessToken, refreshToken };
     } catch (e) {
@@ -50,12 +60,11 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
-    const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new UnauthorizedException();
-    const match = password == user.password;
-    if (!match) throw new UnauthorizedException();
+    const user = await this.validateUser(email, password);
+
     const refreshToken = this.generateRefreshToken(user.id);
     await this.updateRefreshToken(user.id, refreshToken);
+
     return {
       accessToken: this.generateAccessToken(user.id),
       refreshToken,
@@ -95,5 +104,15 @@ export class AuthService {
       });
     }
     await this.refreshTokenRepository.save(entity);
+  }
+
+  private async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) throw new UnauthorizedException();
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new UnauthorizedException();
+
+    return user;
   }
 }
