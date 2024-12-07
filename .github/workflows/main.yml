@@ -54,7 +54,9 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker stop ${{ env.NAME }} || true
+          docker rm ${{ env.NAME }} || true
+          docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
           docker run --add-host=host.docker.internal:host-gateway \
             -e PORT=${{ secrets.PORT }}
             -e POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
