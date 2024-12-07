@@ -11,6 +11,8 @@ import * as winston from 'winston';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
 import * as basicAuth from 'express-basic-auth';
+import { SentryInterceptor } from './common/interceptor/sentry.interceptor';
+import * as Sentry from '@sentry/nestjs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -61,8 +63,13 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, swaggerDocument, custom);
   }
 
+  Sentry.init({ dsn: configService.get('sentry.dsn') });
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new SentryInterceptor(),
+  );
 
   await app.listen(port);
   Logger.log(`STAGE=${stage}`);

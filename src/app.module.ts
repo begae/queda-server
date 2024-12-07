@@ -10,13 +10,14 @@ import jwtConfig from './config/jwt.config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import swaggerConfig from './config/swagger.config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import sentryConfig from './config/sentry.config';
 
 @Module({
   imports: [
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [postgresConfig, jwtConfig, swaggerConfig],
+      load: [postgresConfig, jwtConfig, swaggerConfig, sentryConfig],
     }),
     // dynamic module configuring registered 'postgres' config
     TypeOrmModule.forRootAsync({
