@@ -55,4 +55,16 @@ jobs:
       - name: Docker run
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run --add-host=host.docker.internal:host-gateway -e POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} -d -p 80:3000 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker run --add-host=host.docker.internal:host-gateway \
+            -e PORT=${{ secrets.PORT }}
+            -e POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
+            -e POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} \
+            -e POSTGRES_USERNAME=${{ secrets.POSTGRES_USERNAME }} \
+            -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+            -e POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            -e SLACK_WEBHOOK=${{ secrets.SLACK_WEBHOOK }} \
+            -e SWAGGER_USERNAME=${{ secrets.SWAGGER_USERNAME }} \
+            -e SWAGGER_PASSWORD=${{ secrets.SWAGGER.PASSWORD }} \
+            -e -d -p 80:3000 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
