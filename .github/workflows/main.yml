@@ -55,7 +55,7 @@ jobs:
       - name: Docker run
         run: |
           docker run --add-host=host.docker.internal:host-gateway \
-            -e PORT=${{ secrets.PORT }}
+            -e PORT=${{ secrets.PORT }} \
             -e POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
             -e POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} \
             -e POSTGRES_USERNAME=${{ secrets.POSTGRES_USERNAME }} \
