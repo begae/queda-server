@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { CreateVideoCommand } from './command/create-video.command';
 import { CreateVideoHandler } from './create-video.handler';
 import { User } from 'src/entity/user.entity';
-import { Video } from 'src/entity/video.entity';
+import { Video } from 'src/entity/post.entity';
 
 class QueryRunner {
   manager: Manager;

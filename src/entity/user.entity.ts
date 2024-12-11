@@ -2,27 +2,32 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Video } from './video.entity';
 import { RefreshToken } from './refresh-token.entity';
 import { Role } from './user.enum';
+import { Profile } from './profile.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // unique columns are also indexes just as pk
-  // test performance with: explain analyze <query>
   @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
+
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshToken: RefreshToken;
+
+  @OneToOne(() => Profile, (profile) => profile.user)
+  @JoinColumn()
+  profile: Profile;
 
   @Column({ type: 'enum', enum: Role })
   role: Role = Role.User;
@@ -32,10 +37,4 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  @OneToMany(() => Video, (video) => video.user)
-  videos: Video[];
-
-  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
-  refreshToken: RefreshToken;
 }

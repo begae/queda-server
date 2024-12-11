@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateVideoCommand } from './command/create-video.command';
 import { DataSource } from 'typeorm';
-import { Video } from 'src/entity/video.entity';
+import { Video } from 'src/entity/post.entity';
 import { User } from 'src/entity/user.entity';
 import { VideoCreatedEvent } from './event/video-created.event';
 import { writeFile } from 'fs/promises';

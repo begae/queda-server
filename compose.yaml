@@ -3,7 +3,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres
+    image: postgis
     container_name: postgres
     ports:
       - '${POSTGRES_PORT}:5432'
