@@ -36,22 +36,22 @@ export class Store {
   location: Geometry;
 
   @OneToOne(() => Profile, (profile) => profile.store)
-  @JoinColumn()
+  @JoinColumn({ name: 'owner_profile_id' })
   owner: Profile;
 
   @ManyToMany(() => Profile, (profile) => profile.favorites)
   @JoinTable({
-    name: 'subscriptions',
-    joinColumn: { name: 'store', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'user', referencedColumnName: 'user' },
+    name: 'store_user_subscriptions',
+    joinColumn: { name: 'store_id' },
+    inverseJoinColumn: { name: 'user_profile_id' },
   })
   subscribers: Profile[];
 
   @OneToMany(() => Post, (post) => post.publishedBy)
   posts: Post[];
 
-  @ManyToMany(() => Tag, (keyword) => keyword.stores)
-  keywords: Tag[];
+  @ManyToMany(() => Tag, (tag) => tag.stores)
+  tags: Tag[];
 
   @OneToOne(() => Post)
   @JoinColumn()

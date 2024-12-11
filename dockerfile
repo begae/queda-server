@@ -3,7 +3,6 @@ FROM node AS builder
 RUN mkdir -p /app
 WORKDIR /app
 ADD . .
-RUN mkdir -p video-storage
 
 RUN npm install --legacy-peer-deps
 RUN npm run build

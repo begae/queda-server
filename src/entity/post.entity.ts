@@ -25,8 +25,8 @@ export class Post {
   @Column('simple-array', { nullable: true })
   attachments: string[];
 
-  @ManyToMany(() => Profile, (profile) => profile.liked)
-  likes: Profile[];
+  @ManyToMany(() => Profile, (profile) => profile.likedPosts)
+  likedUsers: Profile[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

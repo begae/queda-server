@@ -33,13 +33,13 @@ export class Profile {
   @OneToOne(() => Store, (store) => store.owner)
   store: Store;
 
-  @ManyToMany(() => Post, (post) => post.likes)
+  @ManyToMany(() => Post, (post) => post.likedUsers)
   @JoinTable({
-    name: 'likes',
-    joinColumn: { name: 'user', referencedColumnName: 'user' },
-    inverseJoinColumn: { name: 'post', referencedColumnName: 'id' },
+    name: 'user_post_likes',
+    joinColumn: { name: 'user_profile_id' },
+    inverseJoinColumn: { name: 'post_id' },
   })
-  liked: Post[];
+  likedPosts: Post[];
 
   @ManyToMany(() => Store, (store) => store.subscribers)
   favorites: Store[];

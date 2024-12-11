@@ -1,16 +1,25 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Store } from './store.entity';
 
 @Entity()
 export class Tag {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @Column({ unique: true })
   value: string;
 
-  @ManyToMany(() => Store, (store) => store.keywords)
+  @ManyToMany(() => Store, (store) => store.tags)
   @JoinTable({
-    name: 'tagged',
-    joinColumn: { name: 'tag', referencedColumnName: 'value' },
-    inverseJoinColumn: { name: 'store', referencedColumnName: 'id' },
+    name: 'tag_store_relation',
+    joinColumn: { name: 'tag_id' },
+    inverseJoinColumn: { name: 'store_id' },
   })
   stores: Store[];
 }
