@@ -1,8 +1,6 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { VideoModule } from './video/video.module';
-import { AnalyticsModule } from './analytics/analytics.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import postgresConfig from './config/postgres.config';
@@ -44,8 +42,6 @@ import sentryConfig from './config/sentry.config';
     }),
     AuthModule,
     UserModule,
-    VideoModule,
-    AnalyticsModule,
     HealthModule,
   ],
   providers: [Logger],
