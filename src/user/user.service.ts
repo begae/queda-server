@@ -14,8 +14,9 @@ export class UserService {
     return this.userRepository.find({ skip: (page - 1) * size, take: size });
   }
 
-  async findOne(id: string) {
-    return 'find user';
+  async findOneById(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    return user;
   }
 
   async findOneByEmail(email: string) {

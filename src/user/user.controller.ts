@@ -14,7 +14,7 @@ import { Roles } from 'src/common/decorator/role.decorator';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto, FindUserResDto, PagingReqDto, PagingResDto)
-@Controller('api/users')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -34,13 +34,8 @@ export class UserController {
   @ApiBearerAuth()
   @ApiGetResponse(FindUserResDto)
   @Get(':id')
-  findOne(@Param() { id }: FindUserReqDto) {
-    return this.userService.findOne(id);
+  async findOne(@Param() { id }: FindUserReqDto) {
+    const user = await this.userService.findOneById(id);
+    return user;
   }
-
-  // @Public()
-  // @Post('bulk')
-  // createBulk() {
-  //   return this.userService.createBulk();
-  // }
 }
