@@ -10,6 +10,7 @@ import swaggerConfig from './config/swagger.config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
 import { PostModule } from './post/post.module';
+import { StoreModule } from './store/store.module';
 import sentryConfig from './config/sentry.config';
 
 @Module({
@@ -45,6 +46,7 @@ import sentryConfig from './config/sentry.config';
     UserModule,
     HealthModule,
     PostModule,
+    StoreModule,
   ],
   providers: [Logger],
 })
