@@ -19,13 +19,11 @@ export class UserService {
   }
 
   async findOneById(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
-    return user;
+    return await this.userRepository.findOneBy({ id });
   }
 
   async findOneByEmail(email: string) {
-    const user = await this.userRepository.findOneBy({ email });
-    return user;
+    return await this.userRepository.findOneBy({ email });
   }
 
   async isAdmin(id: string) {

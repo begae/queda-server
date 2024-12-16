@@ -9,15 +9,18 @@ export class PostService {
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
   ) {}
 
-  async findOneById() {}
+  async findOneById(id: string) {
+    return await this.postRepository.findOneBy({ id });
+  }
 
   async findFollowingEveryLatest(following: string[]) {
     const posts = await this.postRepository
-      .createQueryBuilder()
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.publishedBy', 'store')
       .where('post.store_id IN (:...following)', { following })
-      .orderBy('post.created_at')
+      .orderBy('post.created_at', 'DESC')
       .getMany();
 
-    return posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return posts;
   }
 }

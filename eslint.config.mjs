@@ -39,7 +39,7 @@ export default [
 
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir: '/Users/begae/queda-nestjs',
+        tsconfigRootDir: '/home/begae/queda-server',
       },
     },
 

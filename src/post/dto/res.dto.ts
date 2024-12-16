@@ -3,8 +3,10 @@ export class FindPostResDto {
   title: string;
   body: string;
   attachments: string[];
-  likedUsers: string[];
+  likes: number;
   createdAt: string;
   updatedAt: string;
-  publishedBy: string;
+  storeId: string;
+  storeName: string;
+  storeProfilePicture: string;
 }

@@ -41,7 +41,6 @@ export class UserController {
   @ApiGetResponse(FindUserResDto)
   @Get(':id')
   async findOne(@Param() { id }: FindUserReqDto) {
-    const user = await this.userService.findOneById(id);
-    return user;
+    return await this.userService.findOneById(id);
   }
 }
