@@ -14,12 +14,12 @@ export class PostService {
       .createQueryBuilder('post')
       .distinctOn(['post.store_id'])
       .orderBy('post.created_at')
+      .skip((page - 1) * size)
+      .take(size)
       .getMany();
 
     return posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
-
-  async findTaggedLatest() {}
 
   async findTaggedRelevance() {}
 

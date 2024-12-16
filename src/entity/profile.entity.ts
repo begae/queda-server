@@ -23,7 +23,7 @@ export class Profile {
   @Column()
   nickname: string;
 
-  @Column({ name: 'profile_picture' })
+  @Column({ name: 'profile_picture', nullable: true })
   profilePicture: string;
 
   @Column('geometry', { spatialFeatureType: 'Point', srid: 4326 })

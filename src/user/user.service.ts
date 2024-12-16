@@ -3,11 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from '../entity/user.enum';
 import { User } from 'src/entity/user.entity';
+import { Geometry } from 'src/entity/geometry.interface';
+import { Profile } from 'src/entity/profile.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
   ) {}
 
   async findAll(page: number, size: number) {
@@ -29,14 +33,17 @@ export class UserService {
     return user.role === Role.Admin;
   }
 
-  async createBulk() {
-    for (let i = 1; i <= 10000; i++) {
-      await this.userRepository.save(
-        this.userRepository.create({
-          email: `someone${i}@somewhere.com`,
-          password: 'sOmepasswor1d^^',
-        }),
-      );
-    }
+  async createProfile(userData: {
+    userId: string;
+    nickname: string;
+    profilePicture: string;
+    location: Geometry;
+  }) {
+    const profile = this.profileRepository.create(userData);
+    await this.profileRepository.save(profile);
+    const user = await this.userRepository.findOneBy({ id: userData.userId });
+    user.profile = profile;
+    await this.userRepository.save(user);
+    return profile.id;
   }
 }

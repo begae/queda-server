@@ -15,7 +15,7 @@ import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
 
 @ApiTags('Auth')
 @ApiExtraModels(SignupResDto, SigninResDto, RefreshResDto)
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
