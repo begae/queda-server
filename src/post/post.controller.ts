@@ -17,16 +17,9 @@ export class PostController {
     return posts;
   }
 
-  async findLatestFromTaggedStores() {
+  async findLatestFromTaggedStores() {}
 
-  }
+  async findTaggedRelevance() {}
 
-  async findTaggedRelevance() {
-
-  }
-
-  async findOneById() {
-
-  }
-
+  async findOneById() {}
 }

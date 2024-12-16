@@ -5,7 +5,9 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class PostService {
-  constructor(@InjectRepository(Post) private readonly postRepository: Repository<Post>) {}
+  constructor(
+    @InjectRepository(Post) private readonly postRepository: Repository<Post>,
+  ) {}
 
   async findEachEveryLatest(page: number, size: number) {
     const posts = await this.postRepository
@@ -17,15 +19,9 @@ export class PostService {
     return posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  async findTaggedLatest() {
+  async findTaggedLatest() {}
 
-  }
+  async findTaggedRelevance() {}
 
-  async findTaggedRelevance() {
-
-  }
-
-  async findOneById() {
-
-  }
+  async findOneById() {}
 }
