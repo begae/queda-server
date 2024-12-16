@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsInt } from 'class-validator';
+import { Equals, IsArray, IsInt } from 'class-validator';
 
 export class PagingReqDto {
   @ApiPropertyOptional({ description: 'page number, default = 1' })
@@ -12,4 +12,12 @@ export class PagingReqDto {
   @Transform((param) => Number(param.value))
   @IsInt()
   size?: number = 20;
+}
+
+export class LocationDto {
+  @Equals('Point')
+  type: 'Point';
+
+  @IsArray()
+  coordinates: [number, number];
 }

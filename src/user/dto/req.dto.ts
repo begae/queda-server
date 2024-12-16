@@ -1,26 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  Equals,
-  IsArray,
   IsObject,
   IsUrl,
   IsUUID,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+import { LocationDto } from 'src/common/dto/req.dto';
 
 export class FindUserReqDto {
   @ApiProperty({ required: true })
   @IsUUID()
   id: string;
-}
-
-class LocationDto {
-  @Equals('Point')
-  type: 'Point';
-
-  @IsArray()
-  coordinates: [number, number];
 }
 
 export class CreateProfileReqDto {

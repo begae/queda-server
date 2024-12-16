@@ -1,10 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsObject,
+  IsUUID,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { LocationDto } from 'src/common/dto/req.dto';
 
 export class FindStoreReqDto {
-  @ApiProperty({ required: true })
-  @IsUUID()
-  profile_id: string;
+  @ValidateNested()
+  @IsObject()
+  userLocation: LocationDto;
 
-  tags: string;
+  @IsArray()
+  @IsUUID('4', { each: true })
+  tags: string[];
+
+  @IsNumber()
+  @Min(1)
+  radius: number;
 }

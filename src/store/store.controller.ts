@@ -7,8 +7,13 @@ export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
   @Post('tagged')
-  async findTaggedStores(@Body() { profile_id, tags }: FindStoreReqDto) {
-    const stores = await this.storeService.findTaggedStores(profile_id, tags);
-    return stores;
+  async findTaggedStores(
+    @Body() { userLocation, tags, radius }: FindStoreReqDto,
+  ) {
+    return await this.storeService.findFilteredStoresWithLatestPost(
+      userLocation,
+      tags,
+      radius,
+    );
   }
 }

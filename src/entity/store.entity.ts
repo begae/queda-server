@@ -56,4 +56,8 @@ export class Store {
   @OneToOne(() => Post)
   @JoinColumn()
   featuredPost: Post;
+
+  @OneToOne(() => Post)
+  @JoinColumn()
+  latestPost: Post;
 }
