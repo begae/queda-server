@@ -37,7 +37,7 @@ export function mapStoreToListItemDto(store: Store): StoreListItemDto {
   };
 }
 
-export function mapStoreToResponseDto(store: Store): FindStoreResDto {
+export function mapStoreToResDto(store: Store): FindStoreResDto {
   return {
     id: store.id,
     name: store.name,

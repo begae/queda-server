@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -25,21 +26,17 @@ export class AuthService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     let error: Error;
     try {
       const user = await this.userService.findOneByEmail(email);
-      if (user) throw new BadRequestException('email already registered');
-
+      if (user) throw new ConflictException('email already registered');
       const saltRounds = 10;
       const hash = await bcrypt.hash(password, saltRounds);
-
       const userEntity = queryRunner.manager.create(User, {
         email,
         password: hash,
       });
       await queryRunner.manager.save(userEntity);
-
       const accessToken = this.generateAccessToken(userEntity.id);
       const refreshToken = this.generateRefreshToken(userEntity.id);
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
@@ -47,7 +44,6 @@ export class AuthService {
         token: refreshToken,
       });
       await queryRunner.manager.save(refreshTokenEntity);
-
       await queryRunner.commitTransaction();
       return { id: userEntity.id, accessToken, refreshToken };
     } catch (e) {

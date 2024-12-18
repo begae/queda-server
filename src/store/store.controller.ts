@@ -4,7 +4,7 @@ import { FindStoreReqDto } from './dto/req.dto';
 import {
   FindStoreResDto,
   mapStoreToListItemDto,
-  mapStoreToResponseDto,
+  mapStoreToResDto,
   StoreListItemDto,
 } from './dto/res.dto';
 
@@ -17,10 +17,10 @@ export class StoreController {
     @Param() { id }: FindStoreReqDto,
   ): Promise<FindStoreResDto> {
     const store = await this.storeService.findOneById(id);
-    return mapStoreToResponseDto(store);
+    return mapStoreToResDto(store);
   }
 
-  @Post('tagged')
+  @Post('browse')
   async findTaggedStores(
     @Body() { userLocation, tags, radius }: FindStoreReqDto,
   ): Promise<StoreListItemDto[]> {

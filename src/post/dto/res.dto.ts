@@ -20,7 +20,7 @@ export class PostListItemDto {
   createdAt: string;
 }
 
-export function mapPostToResponseDto(post: Post): FindPostResDto {
+export function mapPostToResDto(post: Post): FindPostResDto {
   return {
     id: post.id,
     title: post.title,

@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateProfileReqDto, FindUserReqDto } from './dto/req.dto';
+import { FindUserReqDto } from './dto/req.dto';
 import { PagingReqDto } from 'src/common/dto/req.dto';
 import {
   ApiGetItemsResponse,
@@ -17,12 +17,6 @@ import { Roles } from 'src/common/decorator/role.decorator';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post('profile/create')
-  async createProfile(@Body() userData: CreateProfileReqDto) {
-    const profileId = await this.userService.createProfile(userData);
-    return profileId;
-  }
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindUserResDto)
