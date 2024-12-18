@@ -20,8 +20,8 @@ export class Profile {
   @OneToOne(() => User, (user) => user.profile)
   user: User;
 
-  @Column()
-  nickname: string;
+  @Column({ unique: true })
+  handle: string;
 
   @Column({ name: 'profile_picture', nullable: true })
   profilePicture: string;

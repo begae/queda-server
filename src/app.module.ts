@@ -11,6 +11,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
 import { PostModule } from './post/post.module';
 import { StoreModule } from './store/store.module';
+import { ProfileModule } from './profile/profile.module';
 import sentryConfig from './config/sentry.config';
 
 @Module({
@@ -47,6 +48,7 @@ import sentryConfig from './config/sentry.config';
     HealthModule,
     PostModule,
     StoreModule,
+    ProfileModule,
   ],
   providers: [Logger],
 })
