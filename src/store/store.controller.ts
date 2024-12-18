@@ -1,12 +1,24 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { FindStoreReqDto } from './dto/req.dto';
-import { Store } from 'src/entity/store.entity';
-import { StoreListItemDto } from './dto/res.dto';
+import {
+  FindStoreResDto,
+  mapStoreToListItemDto,
+  mapStoreToResponseDto,
+  StoreListItemDto,
+} from './dto/res.dto';
 
 @Controller('stores')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
+
+  @Get(':id')
+  async findOneById(
+    @Param() { id }: FindStoreReqDto,
+  ): Promise<FindStoreResDto> {
+    const store = await this.storeService.findOneById(id);
+    return mapStoreToResponseDto(store);
+  }
 
   @Post('tagged')
   async findTaggedStores(
@@ -17,18 +29,6 @@ export class StoreController {
       tags,
       radius,
     );
-    return stores.map(this.mapStoreToResponseDto);
-  }
-
-  private mapStoreToResponseDto(store: Store): StoreListItemDto {
-    return {
-      id: store.id,
-      name: store.name,
-      profilePicture: store.profilePicture,
-      location: store.location,
-      latestPostId: store.latestPost.id,
-      latestPostTitle: store.latestPost.title,
-      latestPostCreatedAt: store.latestPost.createdAt.toISOString(),
-    };
+    return stores.map(mapStoreToListItemDto);
   }
 }

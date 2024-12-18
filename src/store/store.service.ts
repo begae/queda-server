@@ -11,6 +11,10 @@ export class StoreService {
     private readonly storeRepository: Repository<Store>,
   ) {}
 
+  async findOneById(id: string) {
+    return await this.storeRepository.findOneBy({ id });
+  }
+
   async findFilteredStoresWithLatestPost(
     userLocation: Geometry,
     tags: string[],

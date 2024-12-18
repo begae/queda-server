@@ -9,6 +9,9 @@ import {
 import { LocationDto } from 'src/common/dto/req.dto';
 
 export class FindStoreReqDto {
+  @IsUUID()
+  id: string;
+
   @ValidateNested()
   @IsObject()
   userLocation: LocationDto;
